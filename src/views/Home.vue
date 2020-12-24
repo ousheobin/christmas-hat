@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <h1>Merry Christmas</h1>
-    <p>试下看 AI 能不能给你的图片带上圣诞帽</p>
+    <p>试下看 AI 能不能给你的图片戴上圣诞帽</p>
     <picView/>
     <div class="statement">
       <p>本功能采用开源技术 Tensorflow.js 实现</p>
