@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/christmas/precache-manifest.14d35de359bf849604bf98ace7c19689.js"
+  "/christmas-hat/precache-manifest.3a5d1b4697b781869237d12d77530ca6.js"
 );
 
 workbox.core.setCacheNameDetails({prefix: "christmas-hat"});
