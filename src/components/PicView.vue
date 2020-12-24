@@ -35,33 +35,43 @@ export default {
     if(!this.$refs.drawingCanvas){
       alert('哎呀，你的浏览器不支持这个功能哦,要不换个浏览器？');
     }
-
-    if(!this.$data.canvasCtx){
-      this.$data.canvasCtx = this.$refs.drawingCanvas.getContext("2d");
-    }
     this.handlePic();
   },
   methods:{
     handleFileChange(){
       let inputDOM = this.$refs.imgInput;
       if(inputDOM && inputDOM.files && inputDOM.files.length > 0){
-        this.$data.filePath = windowURL.createObjectURL(inputDOM.files[0])
-        this.handlePic();
+        this.$data.filePath = windowURL.createObjectURL(inputDOM.files[0]);
         this.$data.showLoading = true;
         this.$data.showCanvas = true;
+        setTimeout(this.waitCanvas, 500)
       }
     },
+
+    waitCanvas(){
+      if(this.$refs.drawingCanvas){
+        this.handlePic();
+      }else{
+        setTimeout(this.waitCanvas, 500)
+      }
+    },
+
     selectFile(){
       let inputDOM = this.$refs.imgInput;
       inputDOM.click();
     },
 
     save(){
+      if(this.$refs.drawingCanvas){
+        this.$data.dataURL = this.$refs.drawingCanvas.toDataURL('img/jpeg');
+        this.$data.showCanvas = false;
+      }
       alert('长按图片就可以保存啦~')
     },
 
     handlePic(){
-      let ctx = this.$data.canvasCtx;
+      let ctx = this.$refs.drawingCanvas.getContext("2d");
+      this.$data.canvasCtx = ctx;
       let canvasElement = this.$refs.drawingCanvas;
       ctx.clearRect(0, 0, canvasElement.width, canvasElement.height);
       this.drawImg(ctx,()=>{
@@ -109,12 +119,17 @@ export default {
     drawHat(predictions){
       const ctx = this.$data.canvasCtx;
       const element = this.$refs.drawingCanvas;
-      ctx.clearRect(0,0,element.width,element.height);
-      // console.log(predictions)
-      this.drawImg(ctx, ()=>{
+      this.drawImg(ctx,()=>{
         let leftEye = [0,0];
         let rightEye = [0,0];
         let nose = [0,0];
+
+        if(predictions.length == 0){
+          this.$data.showLoading = false;
+          this.$data.dataURL = this.$refs.drawingCanvas.toDataURL('img/jpeg');
+          this.$data.showCanvas = false;
+          return;
+        }
         
         for (let i = 0; i < predictions.length; i++) {
 
@@ -144,8 +159,8 @@ export default {
             let height = Math.round((width / image.width) * image.height);
             ctx.drawImage(image, hatCenterX - width * 0.75 , hatCenterY - height * 1.1, width , height );
             if( i == predictions.length - 1){
-              this.$data.dataURL = element.toDataURL('img/png');
               this.$data.showLoading = false;
+              this.$data.dataURL = this.$refs.drawingCanvas.toDataURL('img/jpeg');
               this.$data.showCanvas = false;
             }
           }
@@ -276,7 +291,7 @@ export default {
   }
 
   & .preview-img{
-    width: 80%;
+    max-width: 80%;
     height: auto;
     border: 2px dotted #ffffff;
     padding: 10px;
