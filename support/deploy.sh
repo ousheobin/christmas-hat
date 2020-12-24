@@ -36,7 +36,7 @@ git config user.email "ousheobin@users.noreply.github.com"
 
 git add --all
 
-git commit -m "[Automation] Update the web pages and reference csv." || SKIP_PUSH=true
+git commit -m "[Automation] Update github page." || SKIP_PUSH=true
 
 git push origin "${REMOTE_BRANCH}"
 
