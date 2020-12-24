@@ -7,7 +7,6 @@ on:
 
 env:
     NODE_VERSION: 8.9.4
-    PYTHON_VERSION: 3.8
     GITHUB_PAGES_DEPLOY_KEY: ${{ secrets.DEPLOY_KEY }}
 
 jobs:
@@ -17,10 +16,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Use Python ${{ env.PYTHON_VERSION }}
-      uses: actions/setup-python@v1
-      with:
-          python-version: ${{ env.PYTHON_VERSION }}
             
     - name: Use Node.js ${{ env.NODE_VERSION }}
       uses: actions/setup-node@v1
